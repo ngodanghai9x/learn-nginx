@@ -1,0 +1,35 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx-proxy
+    image: nginx:1.15.3-alpine
+    ports:
+      - 4003:80
+      # - 80:80
+      # - '443:443'
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      # - ./config/nginx/nginx.conf:/etc/nginx/conf.d/dev.conf 
+      # - ./nginx.conf:/etc/nginx/conf.d/dev.conf   # Corrected path
+    links:
+      - app1:app1
+      - app2:app2
+    networks:
+      - my-network
+  app1:
+    container_name: my-app1
+    image: service1:latest
+    ports:
+      - 4001:4001
+    networks:
+      - my-network
+  app2:
+    container_name: my-app2
+    image: service2:latest
+    ports:
+      - 4002:4002
+    networks:
+      - my-network
+
+networks:
+  my-network: 
